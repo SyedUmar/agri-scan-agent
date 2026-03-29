@@ -47,15 +47,15 @@ def load_yolo_model():
                 # model_url = "https://drive.google.com/uc?export=download&id=YOUR_FILE_ID"
                 
                 # Option 3: HuggingFace Hub (recommended for large files)
-                #from huggingface_hub import hf_hub_download
+                from huggingface_hub import hf_hub_download
                 
                 # Upload your best.pt to HF: https://huggingface.co/new
                 # Then use:
-                #model_path = hf_hub_download(
-                 #   repo_id="your-username/agri-scan-models",  # Replace with your HF repo
-                  #  filename="best.pt",
-                   # local_dir="assets"
-               # )
+                model_path = hf_hub_download(
+                    repo_id="your-username/agri-scan-models",  # Replace with your HF repo
+                    filename="best.pt",
+                    local_dir="assets"
+                )
                 
                 st.success("✅ Model downloaded successfully!")
                 
