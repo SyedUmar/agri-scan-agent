@@ -167,7 +167,7 @@ def main():
         st.write("**📊 Classes:** mildew, Rose_P01, Healthy")
         st.divider()
         st.info("💡 **Pro Tip:** Use clear, well-lit photos of single leaves for best accuracy.")
-        st.caption("Built for farmers • 1-Week Sprint Project")
+        st.caption("Built for farmers.")
     
     # Main Content: Image Upload
     uploaded_file = st.file_uploader("📤 Upload Leaf Image", type=["jpg", "jpeg", " "], help="Supported formats: JPG, JPEG, PNG")
