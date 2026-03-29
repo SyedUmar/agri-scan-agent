@@ -27,23 +27,27 @@ CONFIDENCE_THRESHOLD = 0.5
 # ─────────────────────────────────────────────────────────────
 # MODEL LOADER WITH AUTO-DOWNLOAD (For Streamlit Cloud)
 # ─────────────────────────────────────────────────────────────
+# ─────────────────────────────────────────────────────────────
+# MODEL LOADER WITH AUTO-DOWNLOAD (For Streamlit Cloud)
+# ─────────────────────────────────────────────────────────────
 @st.cache_resource
 def load_yolo_model():
-    """Load YOLOv8 model with graceful fallback"""
+    """Load YOLOv8 model, auto-download if missing"""
+    
     model_path = "assets/best.pt"
     
-    # Check if custom model exists locally
-    if os.path.exists(model_path):
-        try:
-            return YOLO(model_path)
-        except Exception as e:
-            st.warning(f"⚠️ Custom model failed to load: {str(e)}")
-    
-    # Fallback to pretrained YOLOv8n (works out-of-box)
-    st.warning("⚠️ Using pretrained YOLOv8n for demo (custom model not found)")
-    st.info("💡 Custom crop disease model available in local deployment")
-    return YOLO("yolov8n.pt")  # Pretrained on COCO dataset
-               
+    # If model doesn't exist locally, try to download
+    if not os.path.exists(model_path):
+        with st.spinner("📦 Downloading AI model (first run only)..."):
+            try:
+                # Option 1: Direct GitHub Raw URL (if you upload model to GitHub)
+                # model_url = "https://raw.githubusercontent.com/YOUR_USERNAME/agri-scan-agent/main/assets/best.pt"
+                
+                # Option 2: Google Drive (public link) - convert to direct download
+                # model_url = "https://drive.google.com/uc?export=download&id=YOUR_FILE_ID"
+                
+                # Option 3: HuggingFace Hub (recommended for large files)
+                from huggingface_hub import hf_hub_download
                 
                 # Upload your best.pt to HF: https://huggingface.co/new
                 # Then use:
