@@ -10,30 +10,34 @@ client = Groq(
 )
 
 def get_treatment_plan(disease_name, confidence):
-    # Use Llama 3 model (Fast & Free)
-    model = "llama3-8b-8192" 
+    try:
+        client = Groq(api_key=os.getenv("GROQ_API_KEY"))
+        
+        # ✅ Use supported model
+        model_name = "llama-3.1-8b-instant"
+        
+        prompt = f"""
+        You are an expert agricultural advisor. 
+        A farmer has uploaded a leaf image and our AI detected:
+        - Disease: {disease_name}
+        - Confidence: {confidence:.1f}%
+        
+        Please provide:
+        1. ✅ Brief confirmation of the diagnosis
+        2. 🌿 One organic/natural remedy
+        3. 💊 One chemical treatment (if severe)
+        4. 🛡️ One preventive measure for future
+        
+        Keep responses concise, practical, and farmer-friendly.
+        """
+        
+        response = client.chat.completions.create(
+            model=model_name,  # ✅ Updated model
+            messages=[{"role": "user", "content": prompt}],
+            temperature=0.3,
+            max_tokens=400
+        )
+        return response.choices[0].message.content
+    except Exception as e:
+        return f"⚠️ Agent error: {str(e)}"
     
-    prompt = f"""
-    You are an expert agronomist. 
-    Detected Disease: {disease_name}
-    Confidence Score: {confidence}%
-    
-    Task: 
-    1. Confirm the diagnosis briefly.
-    2. Provide 3 actionable treatment steps (1 Organic, 1 Chemical, 1 Preventive).
-    3. Keep the tone encouraging for farmers.
-    """
-
-    response = client.chat.completions.create(
-        model=model,
-        messages=[
-            {
-                "role": "user",
-                "content": prompt
-            }
-        ],
-        temperature=0.5,
-        max_tokens=500
-    )
-    
-    return response.choices[0].message.content
