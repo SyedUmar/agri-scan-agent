@@ -191,6 +191,7 @@ The target policy is to **fail on `serious` or higher** once the current baselin
 
 Use exact severity terms in test names to keep pass/fail behavior unambiguous:
 
+
 - `test_ci_fails_on_critical_findings`
 - `test_ci_passes_with_serious_when_no_critical`
 - `test_ci_passes_with_moderate_and_low_when_no_critical`
@@ -272,3 +273,4 @@ See [CHANGELOG.md](CHANGELOG.md) for project history.
 ## 19. License
 
 No license file is currently present in this repository. Add a `LICENSE` file to define usage and distribution terms.
+
