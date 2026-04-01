@@ -276,8 +276,7 @@ See [CHANGELOG.md](CHANGELOG.md) for project history.
 
 ## 19. License
 
-No license file is currently present in this repository. Add a `LICENSE` file to define usage and distribution terms.
-<<<<<<< codex/update-readme.md-for-ci-details-dl95wc
+No license file is currently present in this repository. 
 =======
 >>>>>>> main
 >>>>>>> main
