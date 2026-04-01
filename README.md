@@ -263,6 +263,13 @@ Contributions are welcome. Suggested process:
 
 ---
 
+
+## Deployment
+
+See [DEPLOYMENT.md](DEPLOYMENT.md) for full local preview and deployment instructions.
+
+---
+
 ## 18. Changelog
 
 See [CHANGELOG.md](CHANGELOG.md) for project history.
