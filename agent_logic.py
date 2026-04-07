@@ -1,17 +1,24 @@
 """LLM interaction layer for Agri-Scan treatment recommendation generation."""
 
-from typing import Sequence, Tuple
+import os
+from typing import Iterable, Iterator, Sequence, Tuple
 
 import streamlit as st
 from groq import Groq
+from streamlit.errors import StreamlitSecretNotFoundError
 from tenacity import retry, stop_after_attempt, wait_exponential
 
 
 def _get_groq_api_key() -> str:
-    """Read Groq API key from Streamlit secrets and fail fast if missing."""
-    api_key = st.secrets.get("GROQ_API_KEY")
+    """Read Groq API key from Streamlit secrets, then environment fallback."""
+    try:
+        secret_key = st.secrets.get("GROQ_API_KEY")
+    except StreamlitSecretNotFoundError:
+        secret_key = None
+
+    api_key = secret_key or os.getenv("GROQ_API_KEY")
     if not api_key:
-        st.error("❌ Missing GROQ_API_KEY in Streamlit secrets.")
+        st.error("❌ Missing GROQ_API_KEY in Streamlit secrets or environment variables.")
         st.stop()
     return api_key
 
@@ -82,12 +89,18 @@ Instructions:
     )
 
 
+def iter_stream_text(stream: Iterable) -> Iterator[str]:
+    """Yield plain text fragments from Groq streaming chunks for Streamlit rendering."""
+    for chunk in stream:
+        if not chunk.choices:
+            continue
+        delta = chunk.choices[0].delta.content if chunk.choices[0].delta else None
+        if delta:
+            yield delta
+
+
 def get_treatment_plan(detections, target_language: str = "English") -> str:
     """Backward-compatible non-stream helper assembled from streamed chunks."""
     stream = stream_treatment_plan(detections, target_language=target_language)
-    parts = []
-    for chunk in stream:
-        delta = chunk.choices[0].delta.content if chunk.choices and chunk.choices[0].delta else None
-        if delta:
-            parts.append(delta)
+    parts = list(iter_stream_text(stream))
     return "".join(parts).strip()
