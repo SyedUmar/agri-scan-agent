@@ -3,7 +3,7 @@
 import streamlit as st
 from PIL import Image
 
-from agent_logic import stream_treatment_plan
+from agent_logic import iter_stream_text, stream_treatment_plan
 from model_loader import load_vision_model, process_image
 
 
@@ -71,7 +71,7 @@ def main() -> None:
             detections=detections,
             target_language=selected_language,
         )
-        st.write_stream(stream)
+        st.write_stream(iter_stream_text(stream))
 
 
 if __name__ == "__main__":
